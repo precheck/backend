@@ -1,5 +1,6 @@
 package com.cqprecheck.precheck.Controllers;
 
+import com.cqprecheck.precheck.Models.Organization;
 import com.cqprecheck.precheck.Repositories.EntityRepository;
 import com.cqprecheck.precheck.Security.UserPrincipal;
 import com.cqprecheck.precheck.Service.GoogleApiService;
@@ -31,7 +32,7 @@ public class DocumentController {
 
     @PostMapping
     public Map<String, List<com.cqprecheck.precheck.Models.Entity>> analyzeDocument(@AuthenticationPrincipal UserPrincipal principal, @RequestBody String text){
-        System.out.println(principal.getAccount().getUsername());
+        Organization organization = principal.getAccount().getOrganization();
         List<com.cqprecheck.precheck.Models.Entity> entities = service.analyzeDocument(text)
                 .stream()
                 .filter((Entity e) -> e.getMentionsList()
@@ -42,7 +43,7 @@ public class DocumentController {
 
         Map<String, List<com.cqprecheck.precheck.Models.Entity>> entityMap = new HashMap<>();
         for(com.cqprecheck.precheck.Models.Entity entity : entities){
-            entityMap.put(entity.getName(), entityRepository.findByName(entity.getName()));
+            entityMap.put(entity.getName(), entityRepository.findByNameAndOrganization(entity.getName(), organization));
         }
 
         return entityMap;
