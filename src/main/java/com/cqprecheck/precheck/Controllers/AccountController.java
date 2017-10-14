@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +22,11 @@ public class AccountController {
     public AccountController(AccountRepository accountRepository, OrganizationRepository organizationRepository){
         this.accountRepository = accountRepository;
         this.organizationRepository = organizationRepository;
+    }
+
+    @GetMapping(path = "/retrieve")
+    public List<Account> retrieveAccountsInOrganization(@RequestBody Organization input) {
+        return accountRepository.findByOrganization(input);
     }
 
     @PostMapping (path = "add-existing/organization")
