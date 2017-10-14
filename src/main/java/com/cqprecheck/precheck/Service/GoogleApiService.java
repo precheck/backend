@@ -2,12 +2,9 @@ package com.cqprecheck.precheck.Service;
 
 import com.google.api.gax.core.CredentialsProvider;
 import com.google.api.gax.core.FixedCredentialsProvider;
-import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.language.v1beta2.*;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,7 @@ public class GoogleApiService {
 
     static{
         try {
-            ServiceAccountCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(GoogleApiService.class.getClassLoader().getResource("CQ-Precheck.json").getFile()));
+            ServiceAccountCredentials credentials = ServiceAccountCredentials.fromStream(GoogleApiService.class.getClassLoader().getResourceAsStream("CQ-Precheck.json"));
             CredentialsProvider provider = FixedCredentialsProvider.create(credentials);
             serviceSettings = LanguageServiceSettings.newBuilder().setCredentialsProvider(provider).build();
         } catch (IOException e) {
