@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/accounts")
+@RequestMapping(path = "/api/accounts")
 public class AccountController {
 
     private AccountRepository accountRepository;
@@ -36,11 +36,6 @@ public class AccountController {
             return accountRepository.save(currentAccount);
         }
         return new Account();
-    }
-
-    @PostMapping (path = "/new")
-    public Account createAccount(@RequestBody Account account){
-        return accountRepository.save(account);
     }
 
     @DeleteMapping(path = "/remove")
