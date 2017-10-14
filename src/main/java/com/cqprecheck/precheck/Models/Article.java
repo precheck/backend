@@ -1,8 +1,6 @@
 package com.cqprecheck.precheck.Models;
 
-import javax.persistence.Entity;
-
-@Entity
+@javax.persistence.Entity
 public class Article {
 
     private String text;
