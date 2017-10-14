@@ -9,32 +9,36 @@ import com.google.cloud.language.v1beta2.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleApiService {
 
-    public void analyzeDocument(String documentText){
-        ServiceAccountCredentials credentials = null;
+    private static LanguageServiceSettings serviceSettings = null;
+
+    static{
         try {
-            credentials = ServiceAccountCredentials.fromStream(new FileInputStream(getClass().getClassLoader().getResource("CQ-Precheck.json").getFile()));
+            ServiceAccountCredentials credentials = ServiceAccountCredentials.fromStream(new FileInputStream(GoogleApiService.class.getClassLoader().getResource("CQ-Precheck.json").getFile()));
             CredentialsProvider provider = FixedCredentialsProvider.create(credentials);
-            LanguageServiceSettings serviceSettings = LanguageServiceSettings.newBuilder().setCredentialsProvider(provider).build();
+            serviceSettings = LanguageServiceSettings.newBuilder().setCredentialsProvider(provider).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public List<Entity> analyzeDocument(String documentText){
+        List<Entity> entities = new ArrayList<>();
+        try {
             LanguageServiceClient language = LanguageServiceClient.create(serviceSettings);
             Document doc = Document.newBuilder()
                     .setContent(documentText).setType(Document.Type.PLAIN_TEXT).build();
 
-            // Detects the sentiment of the text
-            List<Entity> entities = language.analyzeEntitySentiment(doc, EncodingType.UTF8).getEntitiesList();
-
-            System.out.printf("Text: %s%n", documentText);
-            for(Entity entity : entities){
-                System.out.println("Entity: " + entity.getName() + " Type: " + entity.getType());
-                for (EntityMention mention : entity.getMentionsList()){
-                    System.out.println(" mention: " + mention.getType());
-                }
-            }
+            entities = language.analyzeEntitySentiment(doc, EncodingType.UTF8).getEntitiesList();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return entities;
     }
 }
