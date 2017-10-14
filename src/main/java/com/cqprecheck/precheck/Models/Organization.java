@@ -1,17 +1,26 @@
 package com.cqprecheck.precheck.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@javax.persistence.Entity
 public class Organization {
 
     private String name;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @OneToMany(mappedBy = "organization")
+
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
     private List<Account> accounts;
+
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<Entity> entities;
 
     public String getName() {
         return name;
