@@ -1,10 +1,17 @@
 package com.cqprecheck.precheck.Models;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Entity
 public class Organization {
 
     private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Account[] accounts;
+    @OneToMany(mappedBy = "organization")
+    private List<Account> accounts;
 
     public String getName() {
         return name;
@@ -22,8 +29,13 @@ public class Organization {
         this.id = id;
     }
 
-    public Account[] getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 
+    public Organization(String name) {
+        this.name = name;
+    }
+
+    public Organization() { }
 }

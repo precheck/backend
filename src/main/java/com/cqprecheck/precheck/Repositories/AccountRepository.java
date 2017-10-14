@@ -11,5 +11,5 @@ public interface AccountRepository  extends CrudRepository<Account, Long>{
     Optional<Account> findByUsername(String username);
     Optional<Account> findById(Long id);
     Optional<Account> findByEmail(String email);
-    List<Account> findByOrganization_id(Organization organizationId);
+    List<Account> findByOrganization(Organization organization);
 }

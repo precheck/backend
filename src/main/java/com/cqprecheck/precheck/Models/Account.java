@@ -1,25 +1,37 @@
 package com.cqprecheck.precheck.Models;
 
-import javax.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
 public class Account {
 
     private String username;
+    @JsonIgnore
     private String password;
     private String email;
-    private Organization organization_id;
+
+    @ManyToOne
+    private Organization organization;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Account(){}
+    public Account(){}
 
-    private Account(String username, String password){
+    public Account(String username, String password){
         this.username = username;
         this.password = password;
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public String getPassword(){
+        return password;
     }
 
     public void setUsername(String username) {
@@ -38,12 +50,12 @@ public class Account {
         this.email = email;
     }
 
-    public Organization getOrganization_id() {
-        return organization_id;
+    public Organization getOrganization() {
+        return organization;
     }
 
     public void setOrganization_id(Organization organization_id) {
-        this.organization_id = organization_id;
+        this.organization = organization_id;
     }
 
     public Long getId() {
