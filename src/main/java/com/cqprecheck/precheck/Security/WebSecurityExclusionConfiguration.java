@@ -6,11 +6,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
-@EnableWebSecurity
 public class WebSecurityExclusionConfiguration extends WebSecurityConfigurerAdapter {
+    String [] publicUrls = new String [] {
+            "/api/add-account/new"
+    };
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-        http.authorizeRequests().antMatchers("/api/add-account/new").permitAll();
+        http
+                .authorizeRequests()
+                .antMatchers("/api/add-account/new").permitAll()
+                .antMatchers("/**").authenticated()
+                .and().csrf().disable();
     }
 }

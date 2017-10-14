@@ -1,6 +1,7 @@
 package com.cqprecheck.precheck.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 
@@ -8,7 +9,6 @@ import javax.persistence.*;
 public class Account {
 
     private String username;
-    @JsonIgnore
     private String password;
     private String email;
 
@@ -35,14 +35,17 @@ public class Account {
         return username;
     }
 
+    @JsonIgnore
     public String getPassword(){
         return password;
     }
+
 
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @JsonProperty
     public void setPassword(String password) {
         this.password = password;
     }
