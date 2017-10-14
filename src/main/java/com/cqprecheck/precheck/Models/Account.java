@@ -62,7 +62,7 @@ public class Account {
         return organization;
     }
 
-    public void setOrganization(Organization organization_id) {
+    public void setOrganization(Organization organization) {
         this.organization = organization;
     }
 

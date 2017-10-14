@@ -1,5 +1,6 @@
 package com.cqprecheck.precheck.Controllers;
 
+import com.cqprecheck.precheck.Models.EntityHolder;
 import com.cqprecheck.precheck.Models.Organization;
 import com.cqprecheck.precheck.Repositories.EntityRepository;
 import com.cqprecheck.precheck.Security.UserPrincipal;
@@ -31,19 +32,20 @@ public class DocumentController {
 
 
     @PostMapping
-    public Map<String, List<com.cqprecheck.precheck.Models.Entity>> analyzeDocument(@AuthenticationPrincipal UserPrincipal principal, @RequestBody String text){
+    public Map<String, EntityHolder> analyzeDocument(@AuthenticationPrincipal UserPrincipal principal, @RequestBody String text){
         Organization organization = principal.getAccount().getOrganization();
         List<com.cqprecheck.precheck.Models.Entity> entities = service.analyzeDocument(text)
                 .stream()
                 .filter((Entity e) -> e.getMentionsList()
                         .stream()
-                        .filter((m) -> m.getType() == EntityMention.Type.PROPER).collect(Collectors.toList()).size() > 0)
+                        .filter((m) ->m.getType() == EntityMention.Type.PROPER).collect(Collectors.toList()).size() > 0)
                 .map(com.cqprecheck.precheck.Models.Entity::new)
                 .collect(Collectors.toList());
 
-        Map<String, List<com.cqprecheck.precheck.Models.Entity>> entityMap = new HashMap<>();
+        Map<String, EntityHolder> entityMap = new HashMap<>();
         for(com.cqprecheck.precheck.Models.Entity entity : entities){
-            entityMap.put(entity.getName(), entityRepository.findByNameAndOrganization(entity.getName(), organization));
+            EntityHolder holder = new EntityHolder(entityRepository.findByNameAndOrganization(entity.getName(), organization), entity.getLocations());
+            entityMap.put(entity.getName(), holder);
         }
 
         return entityMap;
