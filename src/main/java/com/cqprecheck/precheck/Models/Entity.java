@@ -9,8 +9,10 @@ import javax.persistence.ManyToOne;
 public class Entity {
 
     private String name;
+
     @ManyToOne
     private Organization organization;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
