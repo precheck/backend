@@ -3,7 +3,7 @@ package com.cqprecheck.precheck.Models;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
+@javax.persistence.Entity
 public class Organization {
 
     private String name;
