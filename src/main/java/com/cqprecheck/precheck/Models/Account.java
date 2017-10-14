@@ -9,7 +9,7 @@ public class Account {
     private String password;
     private String email;
     private Organization organization_id;
-    private Integer id;
+    private Long id;
 
     private Account(){}
 
@@ -46,11 +46,9 @@ public class Account {
         this.organization_id = organization_id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id;}
 }
