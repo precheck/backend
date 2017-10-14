@@ -26,6 +26,11 @@ public class Account {
         this.password = password;
     }
 
+    public Account(String username, String password, Organization organization){
+        this(username, password);
+        this.organization = organization;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -54,8 +59,8 @@ public class Account {
         return organization;
     }
 
-    public void setOrganization_id(Organization organization_id) {
-        this.organization = organization_id;
+    public void setOrganization(Organization organization_id) {
+        this.organization = organization;
     }
 
     public Long getId() {

@@ -6,6 +6,7 @@ import com.cqprecheck.precheck.Models.Organization;
 import com.cqprecheck.precheck.Repositories.EntityRepository;
 import com.cqprecheck.precheck.Repositories.OrganizationRepository;
 import com.cqprecheck.precheck.Security.UserPrincipal;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,7 @@ public class EntityController {
     }
 
     @DeleteMapping(path = "/{entity_id}")
-    public void deleteEntities(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long entity_id){
+    public ResponseEntity<?> deleteEntities(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long entity_id){
 
         Account currentAccount = principal.getAccount();
         Organization currentAccountOrganization = currentAccount.getOrganization();
@@ -52,9 +53,10 @@ public class EntityController {
         if(entity.isPresent()) {
             if (entityInOrganization(currentAccountOrganization, entity.get())) {
                 entityRepository.delete(entity_id);
+                return ResponseEntity.ok().build();
             }
-
         }
+        return ResponseEntity.badRequest().build();
     }
 
     private Boolean entityInOrganization(Organization organization, Entity entity){
