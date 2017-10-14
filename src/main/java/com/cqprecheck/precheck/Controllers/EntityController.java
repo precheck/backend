@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "api/entity")
@@ -52,12 +53,14 @@ public class EntityController {
 
         Account currentAccount = principal.getAccount();
         Organization currentAccountOrganization = currentAccount.getOrganization();
-        Entity entity =  entityRepository.findById(entity_id);
 
-        if(entityInOrganization(currentAccountOrganization, entity)){
-            entityRepository.delete(entity_id);
+        Optional<Entity> entity =  entityRepository.findById(entity_id);
+        if(entity.isPresent()) {
+            if (entityInOrganization(currentAccountOrganization, entity.get())) {
+                entityRepository.delete(entity_id);
+            }
+
         }
-
     }
 
     private Boolean entityInOrganization(Organization organization, Entity entity){
