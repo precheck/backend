@@ -5,17 +5,14 @@ import com.cqprecheck.precheck.Models.Organization;
 import com.cqprecheck.precheck.Repositories.AccountRepository;
 import com.cqprecheck.precheck.Repositories.OrganizationRepository;
 import com.cqprecheck.precheck.Security.UserPrincipal;
-import org.aspectj.weaver.ast.Or;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/add-account")
+@RequestMapping(path = "api/accounts")
 public class AccountController {
 
     private AccountRepository accountRepository;
@@ -26,15 +23,15 @@ public class AccountController {
         this.organizationRepository = organizationRepository;
     }
 
-    @PostMapping (path = "/existing/organization")
-    public Account createAccount(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Long organization_id){
+    @PostMapping (path = "add-existing/organization")
+    public Account createAccount(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Organization input){
 
         Account currentAccount = principal.getAccount();
 
-        Optional<Organization> existingOrganization = organizationRepository.findById(organization_id);
+        Optional<Organization> existingOrganization = organizationRepository.findById(input.getId());
         if(existingOrganization.isPresent()) {
             Organization organization = existingOrganization.get();
-            organization.setId(organization_id);
+            organization.setId(organization.getId());
             currentAccount.setOrganization(organization);
             return accountRepository.save(currentAccount);
         }
@@ -42,9 +39,19 @@ public class AccountController {
     }
 
     @PostMapping (path = "/new")
-    public Account createAccount(@RequestBody String username, @RequestBody String password){
-
-        Account account = new Account(username,password);
+    public Account createAccount(@RequestBody Account account){
         return accountRepository.save(account);
+    }
+
+    @DeleteMapping(path = "/remove")
+    public ResponseEntity<?> removeAccount(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Long organization_id){
+
+        Account currentAccount = principal.getAccount();
+        Optional<Organization> existingOrganization = organizationRepository.findById(organization_id);
+        if(existingOrganization.isPresent()) {
+            accountRepository.delete(currentAccount);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

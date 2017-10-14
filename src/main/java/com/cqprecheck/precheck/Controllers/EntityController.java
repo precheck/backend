@@ -56,7 +56,7 @@ public class EntityController {
                 return ResponseEntity.ok().build();
             }
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.notFound().build();
     }
 
     private Boolean entityInOrganization(Organization organization, Entity entity){
