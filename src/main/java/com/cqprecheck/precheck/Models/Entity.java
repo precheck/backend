@@ -1,5 +1,7 @@
 package com.cqprecheck.precheck.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,7 @@ public class Entity {
     private String name;
 
     @ManyToOne
+    @JsonIgnore
     private Organization organization;
 
     @Id
@@ -23,6 +26,8 @@ public class Entity {
         this.name = entity.getName();
         this.type = entity.getType().toString();
     }
+
+    public Entity() {}
 
     public String getType() {
         return type;

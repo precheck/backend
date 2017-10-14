@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EntityRepository extends CrudRepository <Entity, Long> {
-    Optional<Entity> findByName(Entity name);
-    Optional<Entity> findById(Entity id);
+    List<Entity> findByName(String name);
+    Optional<Entity> findById(Long id);
     List<Entity> findByOrganization(Organization organization);
 }
