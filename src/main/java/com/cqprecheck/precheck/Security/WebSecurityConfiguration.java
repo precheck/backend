@@ -35,11 +35,4 @@ public class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdap
                         () -> new UsernameNotFoundException("could not find the user '"
                                 + username + "'"));
     }
-
-//    @Bean
-//    @Scope(scopeName = "prototype")
-//    @Lazy
-//    Account account(){
-//        return ((UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAccount();
-//    }
 }

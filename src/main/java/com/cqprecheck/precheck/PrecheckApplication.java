@@ -25,8 +25,6 @@ public class PrecheckApplication {
     CommandLineRunner init(AccountRepository accountRepository,
                            OrganizationRepository organizationRepository) {
         Organization org = organizationRepository.save(new Organization("Org 1"));
-        //GoogleApiService service = new GoogleApiService();
-        //service.analyzeDocument("Google, Apple, Independence Day, Android, phone");
         return (evt) -> Arrays.asList(
                 "teddy,michael".split(","))
                 .forEach(
