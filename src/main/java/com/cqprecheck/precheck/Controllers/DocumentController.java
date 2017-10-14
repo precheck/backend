@@ -2,6 +2,8 @@ package com.cqprecheck.precheck.Controllers;
 
 import com.cqprecheck.precheck.Security.UserPrincipal;
 import com.cqprecheck.precheck.Service.GoogleApiService;
+import com.google.cloud.language.v1beta2.Entity;
+import com.google.cloud.language.v1beta2.EntityMention;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +28,9 @@ public class DocumentController {
         System.out.println(principal.getAccount().getUsername());
         return service.analyzeDocument(text)
                 .stream()
+                .filter((Entity e) -> e.getMentionsList()
+                        .stream()
+                        .filter((m) -> m.getType() == EntityMention.Type.PROPER).collect(Collectors.toList()).size() > 0)
                 .map(com.cqprecheck.precheck.Models.Entity::new)
                 .collect(Collectors.toList());
     }
