@@ -42,9 +42,7 @@ public class AccountController {
     }
 
     @PostMapping (path = "/new")
-    public Account createAccount(@RequestBody String username, @RequestBody String password){
-
-        Account account = new Account(username,password);
+    public Account createAccount(@RequestBody Account account){
         return accountRepository.save(account);
     }
 }

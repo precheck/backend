@@ -30,7 +30,7 @@ public class OrganizationController {
     public Organization create(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Organization organization){
         Organization savedOrganization = organizationRepository.save(organization);
         Account updatedAccount = principal.getAccount();
-        updatedAccount.setOrganization_id(organization);
+        updatedAccount.setOrganization(organization);
         accountRepository.save(updatedAccount);
 
         return savedOrganization;

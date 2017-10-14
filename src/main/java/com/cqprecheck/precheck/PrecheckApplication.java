@@ -38,7 +38,7 @@ public class PrecheckApplication {
                 .forEach(
                         a -> {
                             Account accountToSave = new Account(a, "password");
-                            accountToSave.setOrganization_id(org);
+                            accountToSave.setOrganization(org);
                             Account account = accountRepository.save(accountToSave);
                         });
     }
