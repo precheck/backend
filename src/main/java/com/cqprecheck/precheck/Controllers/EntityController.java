@@ -25,19 +25,13 @@ public class EntityController {
         this.organizationRepository = organizationRepository;
     }
 
-    @PostMapping(path = "/{organization_id}")
-    public Entity addEntity(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Entity entity, @PathVariable Long organization_id){
+    @PostMapping
+    public Entity addEntity(@AuthenticationPrincipal UserPrincipal principal, @RequestBody Entity entity){
 
         Account currentAccount = principal.getAccount();
         Organization currentAccountOrganization = currentAccount.getOrganization();
-        Long currentAccountOrganizationId = currentAccountOrganization.getId();
-
-        if(currentAccountOrganizationId.equals(organization_id)) {
-            Entity savedEntity = entityRepository.save(entity);
-            savedEntity.setOrganization(currentAccountOrganization);
-            return savedEntity;
-        }
-        return null;
+        entity.setOrganization(currentAccountOrganization);
+        return entityRepository.save(entity);
     }
 
     @GetMapping
