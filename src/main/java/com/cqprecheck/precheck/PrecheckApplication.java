@@ -2,6 +2,8 @@ package com.cqprecheck.precheck;
 
 import com.cqprecheck.precheck.Models.Account;
 import com.cqprecheck.precheck.Models.Entity;
+import com.cqprecheck.precheck.Models.Microsoft.Message;
+import com.cqprecheck.precheck.Models.Microsoft.MessageHolder;
 import com.cqprecheck.precheck.Models.Organization;
 import com.cqprecheck.precheck.Repositories.AccountRepository;
 import com.cqprecheck.precheck.Repositories.EntityRepository;
@@ -9,6 +11,7 @@ import com.cqprecheck.precheck.Repositories.OrganizationRepository;
 import com.cqprecheck.precheck.Service.GoogleApiService;
 import com.cqprecheck.precheck.Storage.StorageProperties;
 import com.cqprecheck.precheck.Storage.StorageService;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +19,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -40,6 +44,7 @@ public class PrecheckApplication {
         entityRepository.save(entity);
         storageService.deleteAll();
         storageService.init();
+
         return (evt) -> Arrays.asList(
                 "teddy,michael".split(","))
                 .forEach(
