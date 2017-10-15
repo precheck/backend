@@ -24,3 +24,4 @@ nbdist/
 .nb-gradle/
 /src/main/resources/CQ-Precheck.json
 /.docker/precheck.tar
+/upload-dir/

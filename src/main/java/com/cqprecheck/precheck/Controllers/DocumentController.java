@@ -5,6 +5,7 @@ import com.cqprecheck.precheck.Models.Organization;
 import com.cqprecheck.precheck.Repositories.EntityRepository;
 import com.cqprecheck.precheck.Security.UserPrincipal;
 import com.cqprecheck.precheck.Service.GoogleApiService;
+import com.cqprecheck.precheck.Service.WordDocumentService;
 import com.cqprecheck.precheck.Storage.StorageService;
 import com.google.cloud.language.v1beta2.Entity;
 import com.google.cloud.language.v1beta2.EntityMention;
@@ -55,9 +56,10 @@ public class DocumentController {
     }
 
     @PostMapping("/file")
-    public void handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public void handleFileUpload(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal UserPrincipal principal) {
 
         storageService.store(file);
-
+        WordDocumentService documentService = new WordDocumentService(storageService, entityRepository, principal.getAccount().getOrganization());
+        documentService.processFile(file.getOriginalFilename());
     }
 }
