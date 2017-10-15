@@ -22,7 +22,7 @@ public class MicrosoftGraphService {
             String messageAsString = objectMapper.writeValueAsString(messageHolder);
             messageAsString = messageAsString.replace("odata123", "@odata.type");
             int response = post(messageAsString, oAuthKey);
-            System.out.println("response: " + response);    
+            System.out.println("response: " + response);
             System.out.println(messageAsString);
         } catch (IOException e) {
             e.printStackTrace();

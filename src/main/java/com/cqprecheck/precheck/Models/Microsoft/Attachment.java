@@ -44,11 +44,15 @@ public class Attachment {
         this.contentBytes = contentBytes;
     }
 
-    private void encodeFileToBase64Binary(String fileName, StorageService service) throws IOException {
-        File file = service.load(fileName).toFile();
+    public Attachment(String name){
+        this.name = name;
+    }
+
+    public void encodeFileToBase64Binary(StorageService service) throws IOException {
+        File file = service.load(this.name).toFile();
         FileInputStream in = new FileInputStream(file);
         byte fileData[] = new byte[(int) file.length()];
         in.read(fileData);
-        this.contentBytes = Base64.encodeBase64URLSafeString(fileData);
+        this.contentBytes = Base64.encodeBase64String(fileData);
     }
 }

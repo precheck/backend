@@ -50,8 +50,6 @@ public class Message {
         recipients.add(recipient);
         this.toRecipients = recipients;
         List<Attachment> attachments = new ArrayList<>();
-        Attachment attachment = new Attachment("test.txt", "123456");
-        attachments.add(attachment);
         this.attachments = attachments;
 
     }

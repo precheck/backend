@@ -1,19 +1,25 @@
 package com.cqprecheck.precheck.Controllers;
 
 import com.cqprecheck.precheck.Models.EntityHolder;
+import com.cqprecheck.precheck.Models.Microsoft.Attachment;
+import com.cqprecheck.precheck.Models.Microsoft.Message;
+import com.cqprecheck.precheck.Models.Microsoft.MessageHolder;
 import com.cqprecheck.precheck.Models.Organization;
 import com.cqprecheck.precheck.Repositories.EntityRepository;
 import com.cqprecheck.precheck.Security.UserPrincipal;
 import com.cqprecheck.precheck.Service.GoogleApiService;
+import com.cqprecheck.precheck.Service.MicrosoftGraphService;
 import com.cqprecheck.precheck.Service.WordDocumentService;
 import com.cqprecheck.precheck.Storage.StorageService;
 import com.google.cloud.language.v1beta2.Entity;
 import com.google.cloud.language.v1beta2.EntityMention;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,5 +67,24 @@ public class DocumentController {
         storageService.store(file);
         WordDocumentService documentService = new WordDocumentService(storageService, entityRepository, principal.getAccount().getOrganization());
         documentService.processFile(file.getOriginalFilename());
+    }
+
+    @PostMapping("/email")
+    public ResponseEntity<?> handleEmailAndFileUpload(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal UserPrincipal principal, @RequestParam("auth") String auth){
+        storageService.store(file);
+        WordDocumentService documentService = new WordDocumentService(storageService, entityRepository, principal.getAccount().getOrganization());
+        documentService.processFile(file.getOriginalFilename());
+        Message message = new Message("mdsf3f@mail.missouri.edu");
+        Attachment attachment = new Attachment("test-cq.docx");
+        try {
+            attachment.encodeFileToBase64Binary(storageService);
+            message.getAttachments().add(attachment);
+            MessageHolder holder = new MessageHolder(message);
+            MicrosoftGraphService service = new MicrosoftGraphService();
+            service.sendMail(holder, auth);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().build();
     }
 }
