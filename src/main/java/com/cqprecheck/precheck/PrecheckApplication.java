@@ -19,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import java.util.Arrays;
 
 @SpringBootApplication
-//@EnableConfigurationProperties(StorageProperties.class)
+@EnableConfigurationProperties(StorageProperties.class)
 @ComponentScan(basePackages = "com.cqprecheck.precheck")
 public class PrecheckApplication {
 
